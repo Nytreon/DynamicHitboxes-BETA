@@ -19,9 +19,10 @@ const helpMessage = `
    tool      §7- gives you a hitbox viewer tool§r
    settings  §7- shows active settings§r
    refresh     <refresh: number>    (default: 5)
-   mode      §7- [hitbox, collisionbox, both]§r
-   maxCount  §7- <Entities: number>§r
-   includePlayers §7- toggle player hitboxes§r
+   mode      §7- [hitbox, collisionbox, both]§r (default: both)
+   maxCount  §7- <Entities: number>§r (default: 10)
+   includePlayers §7- toggle player hitboxes§r (default: false)
+   sendNumerics   §7- show numerical bounding box dimensions§r (default: false)
    `;
 
 const scriptEventHandlers = {
@@ -36,6 +37,7 @@ refresh rate: ${settings.get("refreshRate")}
 mode: ${settings.get("toggleMode")}
 Entity Count: ${settings.get("maxEntityCount")}
 Players Included: ${settings.get("includePlayers")}
+send numerics: ${settings.get("numerics")}
 `);}
 	},
 	help({ source }) {
@@ -116,6 +118,10 @@ Players Included: ${settings.get("includePlayers")}
 		if (currentState) excludedList.push("minecraft:player")
 		if (!(currentState)) excludedList.splice(excludedList.indexOf("minecraft:player"), 1);
 		settings.set("excludeEntityIds", excludedList)
+	},
+	sendNumerics(_) {
+		settings.set("numerics", !settings.get("numerics"));
+		world.sendMessage(`Send numerics set to ${settings.get("numerics")}`);	
 	}
 };
 
