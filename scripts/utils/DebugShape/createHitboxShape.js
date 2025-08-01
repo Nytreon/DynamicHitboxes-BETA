@@ -2,8 +2,9 @@ import { debugDrawer, DebugBox, DebugLine } from "@minecraft/debug-utilities";
 import settings from "settings";
 import findEntityHitbox from "utils/Entity/findHitbox";
 
-export default function createHitboxShape (entity) {
+export default function createHitboxShape (entity, viewer) {
 	let hitboxData = findEntityHitbox( entity, settings.get("maxHitboxSize", 10) )
+	let lastKnown = {x: 0, y: 0, z: 0} 
 	
 	if (!hitboxData) return null
 	
@@ -70,6 +71,20 @@ export default function createHitboxShape (entity) {
                 	collisionBound[axis] -= margin;
                 	collisionBoundLocationOffset[axis] += offset;
                 });
+
+		if ((lastKnown.y !== bound.y || lastKnown.x !== bound.x || lastKnown.z !== bound.z) && viewer && settings.get("numerics")) {
+			viewer.sendMessage(`
+§9Hitbox§r
+-x: ${bound.x}
+-y: ${bound.y}
+-z: ${bound.z}
+§9Collision Box§r
+-x: ${collisionBound.x}
+-y: ${collisionBound.y}
+-z: ${collisionBound.z}`);
+		}
+		lastKnown = bound
+
 		
     		boundBox.bound = { ...bound }
 		collisionBox.bound = { ...collisionBound }	
@@ -82,10 +97,6 @@ export default function createHitboxShape (entity) {
     
 	
 const setLocation = ({ x, y, z }) => {
-
-        if (entity.typeId === "minecraft:leash_knot") {
-        	y = y - (boundLocationOffset.y/2)
-        }	
  
 
         //Bounding box
@@ -181,7 +192,7 @@ const setLocation = ({ x, y, z }) => {
 	}
 	
 	update()
-    setLocation(entityLocation)
+	setLocation(entityLocation)
 
     return {
         setLocation,
