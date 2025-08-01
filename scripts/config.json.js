@@ -5,6 +5,7 @@ export default {
 	maxHitboxSize: 10,
 	maxEntityCount: 10,
 	includePlayers: false,
+	numerics: false,
 	toggleMode: "both",
 	refreshRate: 5,
 	itemId: "minecraft:stick",
