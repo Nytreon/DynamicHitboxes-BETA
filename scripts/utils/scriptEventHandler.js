@@ -1,7 +1,4 @@
-import { world, system, Player, ItemStack } from "@minecraft/server";
-import { debugDrawer } from "@minecraft/debug-utilities";
-
-import settings from "settings";
+import { world, system, Player } from "@minecraft/server";
 
 import scriptEventHandlers from "./commands.json.js";
 
@@ -27,4 +24,5 @@ system.afterEvents.scriptEventReceive.subscribe((event) => {
 		}
 	}
 });
+
 
